@@ -1,0 +1,30 @@
+<odoo>
+    <!-- Create Custom Category -->
+    <record id="without_rfq_local_purchase_category" model="ir.module.category">
+        <field name="name">Direct Purchase</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- Create Custom User Groups and Assign to Custom Category -->
+    <record id="group_without_rfq_local_purchase_user" model="res.groups">
+        <field name="name">Employee</field>
+        <field name="category_id" ref="without_rfq_local_purchase_category"/>
+    </record>
+
+    <record id="group_without_rfq_local_purchase_pm_manager" model="res.groups">
+        <field name="name">PM Manager</field>
+        <field name="category_id" ref="without_rfq_local_purchase_category"/>
+    </record>
+
+    <record id="group_without_rfq_local_purchase_finance_manager" model="res.groups">
+        <field name="name">Budget Approver</field>
+        <field name="category_id" ref="without_rfq_local_purchase_category"/>
+    </record>
+
+    <record id="group_without_rfq_local_purchase_ceo" model="res.groups">
+        <field name="name">CEO</field>
+        <field name="category_id" ref="without_rfq_local_purchase_category"/>
+    </record>
+
+
+</odoo>

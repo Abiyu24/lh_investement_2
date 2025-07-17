@@ -1,0 +1,52 @@
+<odoo>
+    <record id="view_foreign_purchase_order_form_shipment" model="ir.ui.view">
+        <field name="name">foreign.purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='ordering']" position="after">
+                <page string="Shipment" name="shipment" attrs="{'invisible': [('purchase_type', '!=', 'foreign')]}">
+                    <group>
+                        <group string="Shipment Document">
+                            <field name="shipment_percent"/>
+                            <field name="is_shipment_partial"/>
+                             <field name="document_tracking_number"/>
+                            <field name="exchange_rate_lc_settlement"/>
+                            <field name="shipment_lc_amount"/>
+                            <field name="shipment_original_send_from_supplier_courier"/>
+
+                        </group>
+
+                        <group string="Shipment Dates">
+                            <field name="shipment_date"/>
+                            <field name="production_completion_date"/>
+                            <field name="shipment_scan_copy_received_date"/>
+                            <field name="shipment_original_copy_received_date"/>
+                            <field name="shipment_original_send_from_supplier"/>
+                             <field name="shipmnet_doc_handed_to_finance"/>
+
+
+
+                        </group>
+                        <group string="Shipment Attachments">
+                            <field name="bill_of_lading"  widget="binary"
+                                   filename="bill_of_lading_filename"/>
+                            <field name="packing_list"  widget="binary" filename="packing_list_filename"/>
+                            <field name="certificate_of_origin" widget="binary"
+                                   filename="certificate_of_origin_filename"/>
+                            <field name="inspection_certificate" widget="binary"
+                                   filename="inspection_certificate_filename"/>
+                        </group>
+
+                        <group string="Shipment Dates">
+                            <field name="shipment_original_copy_received_by_applicant_bank"/>
+                            <field name="disrepancy"/>
+                            <field name="supplier_payment_date"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

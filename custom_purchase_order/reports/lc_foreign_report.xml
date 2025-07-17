@@ -1,0 +1,69 @@
+<odoo>
+    <!-- tree View for Purchase Order LC -->
+    <record id="view_purchase_order_lc_tree" model="ir.ui.view">
+        <field name="name">purchase.order.lc.tree</field>
+        <field name="model">purchase.order.lc</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase Order LC" create="false" edit="false" delete="false">
+                <field name="lc_number"/>
+                <field name="bank"/>
+                <field name="branch"/>
+                <field name="issue_date"/>
+                <field name="expire_date"/>
+                <field name="last_day_shipment"/>
+                <field name="request_approved_date"/>
+                <field name="total_amount_usd"/>
+                <field name="exchange_rate"/>
+                <field name="total_amount_etb"/>
+                <field name="draft_lc_approved" optional ="hide"/>
+                <field name="draft_lc_approved_by_supplier" optional ="hide"/>
+                <field name="lc_send_date_to_supplier"/>
+                <field name="lc_received_date_from_bank" optional ="hide"/>
+                <field name="state"/>
+                <field name="existing_purchase_order_reference" string="Purchase Order Reference"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_lc_pivot" model="ir.ui.view">
+        <field name="name">purchase.order.lc.pivot</field>
+        <field name="model">purchase.order.lc</field>
+        <field name="arch" type="xml">
+            <pivot string="Purchase Order LCs Pivot">
+                <!-- Dimensions -->
+                <field name="purchase_order_id" type="dimension"/>
+                <field name="state" type="dimension"/>
+                <field name="lc_number" type="dimension"/>
+                
+                <!-- Measures (aggregation) -->
+                <field name="total_amount_usd" type="measure" sum="True"/>
+                <field name="total_amount_etb" type="measure" sum="True"/>
+                <field name="exchange_rate" type="measure" sum="True"/>
+
+                <!-- Optional: Add additional dimensions or measures as needed -->
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action for the tree View -->
+    <record id="action_purchase_order_lc" model="ir.actions.act_window">
+        <field name="name">Purchase Order LC Report</field>
+        <field name="res_model">purchase.order.lc</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="view_id" ref="view_purchase_order_lc_tree"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu Items
+    <menuitem id="menu_purchase_order_lc_root" 
+              name="LC Management"
+              parent="purchase.purchase_report_main"
+              sequence="5"            
+             /> -->
+    
+    <menuitem id="menu_purchase_order_lc" 
+              name="LC Reports"
+              parent="menu_combined_foreign_purchase_request_root"
+              sequence="3"            
+              action="action_purchase_order_lc"/>
+</odoo>

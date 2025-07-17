@@ -1,0 +1,10 @@
+<odoo>
+    <!-- Sequence for Local Purchase Request -->
+    <record id="seq_store_request_request" model="ir.sequence">
+        <field name="name">Store Request</field>
+        <field name="code">store.request.request</field>
+        <field name="prefix">SR-%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

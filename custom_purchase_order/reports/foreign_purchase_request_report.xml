@@ -1,0 +1,64 @@
+<odoo>
+    <!-- New tree View for Combined Data -->
+    <record id="view_combined_foreign_purchase_request_tree" model="ir.ui.view">
+        <field name="name">combined.foreign.purchase.request.tree</field>
+        <field name="model">foreign.purchase.request</field>
+        <field name="arch" type="xml">
+            <tree string="Combined Foreign Purchase Requests" create="false" edit="false" delete="false">
+                <field name="reference"/>
+                <field name="requested_by"/>
+                <field name="request_department"/>
+                <field name="approved_by"/>
+                <field name="request_date"/>
+                <field name="product_details" string="Product Names"/>
+                <field name="state"/> 
+                <field name="cost_center" optional ="hide"/>
+                <field name="purpose" optional ="hide"/>
+                <!-- <field name="reason_for_cancel" optional ="hide"/> -->
+                               
+                
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_combined_foreign_purchase_request_pivot" model="ir.ui.view">
+        <field name="name">foreign.purchase.request.pivot</field>
+        <field name="model">foreign.purchase.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Foreign Purchase Requests Pivot">
+                <field name="requested_by"/>
+                <field name="request_department"/>
+                <field name="state"/>
+                <field name="request_date"/>
+                
+                <!-- Example of aggregation, sum of a field (adjust if needed) -->
+                <field name="cost_center" type="measure" sum="True"/>
+                <field name="purpose" type="dimension"/>
+                
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action for the New tree View -->
+    <record id="action_combined_foreign_purchase_request" model="ir.actions.act_window">
+        <field name="name">Foreign Purchase Requests Report</field>
+        <field name="res_model">foreign.purchase.request</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="view_id" ref="view_combined_foreign_purchase_request_tree"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu for the New View -->
+    
+    <menuitem id="menu_combined_foreign_purchase_request_root" 
+              name="Foreign Purchase Requests"
+              parent="purchase.purchase_report_main"
+              sequence="2"            
+             />
+    
+    <menuitem id="menu_combined_foreign_purchase_request" 
+              name="Purchase Requests report"
+              parent="menu_combined_foreign_purchase_request_root"
+              sequence="1"            
+              action="action_combined_foreign_purchase_request"/>
+</odoo>

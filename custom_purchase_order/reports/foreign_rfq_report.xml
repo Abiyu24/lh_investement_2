@@ -1,0 +1,60 @@
+<odoo>
+    <!-- tree View for local.create.rfq -->
+    <record id="view_combined_foreign_create_rfq_tree" model="ir.ui.view">
+        <field name="name">foreign.create.rfq.tree</field>
+        <field name="model">foreign.create.rfq</field>
+        <field name="arch" type="xml">
+            <tree string="Foreign RFQs" create="false" edit="false" delete="false">
+                <!-- Main RFQ fields -->
+                <field name="foreign_reference"/>
+                <field name="purchase_request_id" string="Purchase Request Reference"/>
+                <field name="requested_by"/>
+                <field name="request_department"/>
+                <field name="approved_by"/>
+                <field name="vendor_id"/>
+                <field name="rfq_date"/>
+                <field name="state"/>
+
+                <!-- If 'line_count' is defined as a related field, include it here -->
+                <!-- <field name="line_count"/> -->
+            </tree>
+        </field>
+    </record>
+
+    <!-- Pivot View for local.create.rfq -->
+    <record id="view_combined_foreign_create_rfq_pivot" model="ir.ui.view">
+        <field name="name">foreign.create.rfq.pivot</field>
+        <field name="model">foreign.create.rfq</field>
+        <field name="arch" type="xml">
+            <pivot string="Foreign Purchase Requests Pivot">
+                <field name="requested_by"/>
+                <field name="request_department"/>
+                <field name="state"/>
+                <field name="rfq_date"/>
+                <field name="vendor_id"/>
+
+                <!-- Example of aggregation, sum of a field (adjust if needed) -->
+                
+            
+                <!-- If you have line_count as a measure or dimension, add it here -->
+                <!-- <field name="line_count" type="dimension"/> -->
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action for displaying the tree View -->
+    <record id="action_combined_foreign_create_rfq" model="ir.actions.act_window">
+        <field name="name">Foreign RFQs</field>
+        <field name="res_model">foreign.create.rfq</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="view_id" ref="view_combined_foreign_create_rfq_tree"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu item for accessing the tree View -->
+    <menuitem id="menu_combined_foreign_create_rfq" 
+              name="Foreign RFQ report"
+              parent="menu_combined_foreign_purchase_request_root"
+              sequence="2"            
+              action="action_combined_foreign_create_rfq"/>
+</odoo>

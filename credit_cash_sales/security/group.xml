@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Define the Credit Cash Sales User Group -->
+    <record id="group_credit_cash_sales_user" model="res.groups">
+        <field name="name">Credit Cash Sales User</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Define the Credit Cash Sales Manager Group -->
+    <record id="group_credit_cash_sales_manager" model="res.groups">
+        <field name="name">Credit Cash Sales Manager</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="implied_ids" eval="[(4, ref('credit_cash_sales.group_credit_cash_sales_user')),(4, ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+</odoo>

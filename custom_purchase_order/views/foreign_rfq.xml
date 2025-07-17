@@ -1,0 +1,194 @@
+<odoo>
+    <!-- Form view for Without RFQ Local Purchase -->
+    <record id="view_foreign_rfq" model="ir.ui.view">
+        <field name="name">foreign.create.rfq.form</field>
+        <field name="model">foreign.create.rfq</field>
+        <field name="arch" type="xml">
+            <form string="Foreign RFQ">
+                <header>
+                    <!-- Submit button, visible in 'draft' state -->
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary"
+                            groups="custom_purchase_order.group_foreign_purchase_request_user, custom_purchase_order.group_foreign_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_send" type="object" string="PM Approve" class="btn-success"
+                            groups="custom_purchase_order.group_foreign_purchase_request_pm_manager, custom_purchase_order.group_foreign_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'confirmed')]}"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" class="btn-secondary"
+                            groups="custom_purchase_order.group_foreign_purchase_request_pm_manager, custom_purchase_order.group_foreign_purchase_request_ceo"/>
+                    <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
+                            groups="custom_purchase_order.group_foreign_purchase_request_pm_manager, custom_purchase_order.group_foreign_purchase_request_ceo"/>
+                    <!-- Status bar including all states -->
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_open_email_wizard" type="object" icon="fa-envelope"
+                        attrs="{'invisible': [('state', '!=', 'sent')]}">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">Send Email</span>
+                            </div>
+                        </button>
+
+                        <!--button class="oe_stat_button" name="action_create_and_open_currency_request" type="object"
+                                icon="fa-file-text-o"
+                                attrs="{'invisible': [('state', '!=', 'sent')]}">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">Foreign Currency Request</span>
+                            </div>
+                        </button-->
+                        <button class="oe_stat_button" name="action_create_fpo"
+                                type="object" icon="fa-file-text-o"
+                                attrs="{'invisible': [('state', '!=', 'sent')]}">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">Create PO</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" name="action_view_fpo"
+                                type="object" icon="fa-file-text-o"
+                                attrs="{'invisible': [('state', '!=', 'sent')]}">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="foreign_po_count" widget="statinfo" string=" PO(S)"/>
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="foreign_reference" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="requested_by" readonly="1"/>
+                            <!--field name="request_department" readonly="1"/-->
+                            <field name="approved_by" readonly="1"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="request_date"/>
+                            <field name="request_type" readonly="1"/>
+                            <field name="vendor_id"/>
+                            <field name="vendor_email"/>
+                            <!--field name="request_id" /-->
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Product Lines">
+                            <field name="line_ids" widget="one2many_list" mode="tree,kanban">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <!--field name="hs_code" string="HS Code"/-->
+                                    <field name="uom_id" readonly="1"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Proforma Invoice">
+                            <group>
+                                <group string="Document Identification">
+
+                                    <group>
+                                        <field name="proforma_invoice_no"/>
+                                        <field name="proforma_invoice_date"/>
+                                        <field name="validity_period"/>
+
+                                    </group>
+
+                                </group>
+                                <group string="Goods and Pricing">
+                                    <group>
+
+                                        <field name="currency_id"/>
+                                        <field name="exchange_rate"/>
+                                        <field name="total_amount"/>
+                                    </group>
+                                </group>
+                                <group string="Transaction Terms">
+                                    <group>
+                                        <field name="incoterm"/>
+                                        <field name="terms_conditions"/>
+                                        <field name="payment_term"/>
+                                        <field name="payment_terms"/>
+                                    </group>
+                                </group>
+                                <group string="Logistics">
+                                    <group>
+                                        <field name="country_of_origin"/>
+                                        <field name="shipping_method"/>
+                                        <field name="port_of_loading"/>
+                                        <field name="port_of_discharge"/>
+                                        <field name="port_of_final_destination"/>
+
+                                    </group>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!--page string="Currency Request">
+                            <group>
+                                <field name="currency_request_ids" widget="one2many_list"
+                                       options="{'no_create': True, 'no_open': False}">
+                                    <tree>
+                                        <field name="foreign_currency_request_reference"/>
+                                        <field name="requested_by" readonly="1"/>
+                                        <field name="request_department" readonly="1"/>
+                                        <field name="request_date" readonly="1"/>
+                                        <field name="currency_id"/>
+                                        <field name="price_amount"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page-->
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_foreign_rfq_tree" model="ir.ui.view">
+        <field name="name">foreign.create.rfq.tree</field>
+        <field name="model">foreign.create.rfq</field>
+        <field name="arch" type="xml">
+            <tree string="Foreign RFQ">
+                <field name="foreign_reference"/>
+                <field name="request_date"/>
+                <field name="requested_by"/>
+                <field name="request_department"/>
+                <field name="approved_by"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_foreign_rfq" model="ir.actions.act_window">
+        <field name="name">Foreign RFQ</field>
+        <field name="res_model">foreign.create.rfq</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_foreign_rfq_tree"/>
+        <field name="context">{}</field>
+
+    </record>
+
+
+    <!--menuitem id="menu_foreign_rfq_root"
+              name="Foreign RFQ"
+              parent="foreign_procurement_menu"
+              sequence="2"
+              action="action_foreign_rfq"/-->
+    <menuitem id="menu_foreign_rfq_root"
+              name="Foreign RFQ"
+              parent="purchase.menu_purchase_rfq"
+              sequence="2"
+              action="action_foreign_rfq"/>
+</odoo>

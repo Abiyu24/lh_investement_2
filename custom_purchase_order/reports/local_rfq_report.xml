@@ -1,0 +1,58 @@
+<odoo>
+    <!-- tree View for local.create.rfq -->
+    <record id="view_combined_local_create_rfq_tree" model="ir.ui.view">
+        <field name="name">local.create.rfq.tree</field>
+        <field name="model">local.create.rfq</field>
+        <field name="arch" type="xml">
+            <tree string="Local RFQs" create="false" edit="false" delete="false">
+                <!-- Main RFQ fields -->
+                <field name="reference"/>
+                <field name="purchase_request_id" string="Purchase Request Reference"/>
+                <field name="requested_by"/>
+                <field name="request_department"/>
+                <field name="approved_by"/>
+                <field name="rfq_date"/>
+                <field name="state"/>
+
+                <!-- If 'line_count' is defined as a related field, include it here -->
+                <!-- <field name="line_count"/> -->
+            </tree>
+        </field>
+    </record>
+
+    <!-- Pivot View for local.create.rfq -->
+    <record id="view_combined_local_create_rfq_pivot" model="ir.ui.view">
+        <field name="name">local.create.rfq.pivot</field>
+        <field name="model">local.create.rfq</field>
+        <field name="arch" type="xml">
+            <pivot string="Local Purchase Requests Pivot">
+                <field name="requested_by"/>
+                <field name="request_department"/>
+                <field name="state"/>
+                <field name="rfq_date"/>
+
+                <!-- Example of aggregation, sum of a field (adjust if needed) -->
+                
+            
+                <!-- If you have line_count as a measure or dimension, add it here -->
+                <!-- <field name="line_count" type="dimension"/> -->
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action for displaying the tree View -->
+    <record id="action_combined_local_create_rfq" model="ir.actions.act_window">
+        <field name="name">Local RFQs</field>
+        <field name="res_model">local.create.rfq</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="view_id" ref="view_combined_local_create_rfq_tree"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu item for accessing the tree View -->
+    <menuitem id="menu_combined_local_create_rfq" 
+              name="Local RFQ report"
+              parent="menu_combined_local_purchase_request_root"
+              sequence="2"            
+              action="action_combined_local_create_rfq"/>
+</odoo>

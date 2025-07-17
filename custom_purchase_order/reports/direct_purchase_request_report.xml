@@ -1,0 +1,57 @@
+<odoo>
+    <!-- tree View for Direct Purchase Requests -->
+    <record id="view_combined_direct_purchase_request_tree" model="ir.ui.view">
+        <field name="name">without.rfq.local.purchase.tree</field>
+        <field name="model">without.rfq.local.purchase</field>
+        <field name="arch" type="xml">
+            <tree string="Combined Direct Purchase Requests" create="false" edit="false" delete="false">
+                <field name="reference_wrfq"/>
+                <field name="requested_by"/>
+                <field name="request_department"/>
+                <field name="approved_by"/>
+                <field name="request_date"/>
+                <field name="state"/> 
+                <field name="purpose" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Pivot View for Direct Purchase Requests -->
+    <record id="view_combined_direct_purchase_request_pivot" model="ir.ui.view">
+        <field name="name">without.rfq.local.purchase.pivot</field>
+        <field name="model">without.rfq.local.purchase</field>
+        <field name="arch" type="xml">
+            <pivot string="Direct Purchase Requests Pivot">
+                <field name="requested_by"/>
+                <field name="request_department"/>
+                <field name="state"/>
+                <field name="request_date"/>
+                
+                <!-- Example of aggregation, remove or modify cost_center -->
+                <!-- <field name="cost_center" type="measure" sum="True"/> -->
+                <field name="purpose" type="dimension"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action for the New tree View and Pivot View -->
+    <record id="action_combined_direct_purchase_request" model="ir.actions.act_window">
+        <field name="name">Direct Purchase Requests Report</field>
+        <field name="res_model">without.rfq.local.purchase</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="view_id" ref="view_combined_direct_purchase_request_tree"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu for Direct Purchase Requests Report -->
+    <menuitem id="menu_combined_direct_purchase_request_root" 
+              name="Direct Purchase Requests"
+              parent="purchase.purchase_report_main"
+              sequence="4"/>
+    
+    <menuitem id="menu_combined_direct_purchase_request" 
+              name="Purchase Requests report"
+              parent="menu_combined_direct_purchase_request_root"
+              sequence="1"            
+              action="action_combined_direct_purchase_request"/>
+</odoo>

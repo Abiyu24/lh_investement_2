@@ -1,0 +1,97 @@
+<odoo>
+    <record id="view_foreign_purchase_order_form_good_clearance" model="ir.ui.view">
+        <field name="name">foreign.purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='shipment']" position="after">
+                <page string="Good Clearance" name="good_clearance"
+                          attrs="{'invisible': [('purchase_type', '!=', 'foreign')]}">
+                    <group>
+                        <group string="Transport Information">
+                            <field name="mode_of_transport"/>
+                            <field name="good_arrival_final_destination"/>
+                            <field name="freight_payment_by_air"/>
+                            <field name="freight_payment_date"/>
+                            <field name="freight_settlement_advise_to_finance"/>
+                            <field name="container_deposit_amount"/>
+                        </group>
+                        <group string="Customs  Taxes">
+                            <field name="declaration_number"/>
+                            <field name="custom_duty_tax_amount"/>
+                            <field name="custom_duty_withholding_tax"/>
+                            <field name="custom_duty_tax_paid_date"/>
+                            <field name="custom_tax_acceptance"/>
+                            <field name="custom_duty_tax_additional_amount"/>
+                            <field name="custom_actual_tax_additional_amount"/>
+                        </group>
+                        <group string="FDA  Permits">
+                            <field name="release_permit_applied_to_fda"/>
+                            <field name="release_permit_received_from_fda"/>
+                            <field name="customs_clearance_document" widget="binary"
+                                   filename="customs_clearance_document_filename"/>
+                            <field name="duty_tax_receipt" widget="binary"
+                                   filename="duty_tax_receipt_filename"/>
+                        </group>
+                        <group string="Costs  Final Delivery">
+                            <field name="storage_cost"/>
+                            <field name="demurrage_cost"/>
+                            <field name="local_transport_cost"/>
+                            <field name="loading_unloading_cost"/>
+                            <field name="release_date_from_customs_delivery"/>
+                            <field name="port_of_entry"/>
+                            <field name="clearance_date"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_foreign_purchase_order_form_Post_clearance" model="ir.ui.view">
+        <field name="name">foreign.purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='good_clearance']" position="after">
+                <page string="Post Clearance" name="post_clearance"
+                      attrs="{'invisible': [('purchase_type', '!=', 'foreign')]}">
+                    <group>
+                        <group string="Inventory">
+                            <field name="container_deposited_reimpursed_date"/>
+                            <field name="reconcile_disperancy"/>
+                            <field name="transistor_service_payment_amount"/>
+                            <field name="stamped_declaration_received_date"/>
+                            <field name="transistor_service_payment_done_date"/>
+                            <field name="grn_reconcile_from_received_date"/>
+
+                        </group>
+                        <group string="Post Clearance dates">
+                            <field name="good_arrival_date"/>
+                            <field name="grn_submitted_to_finance"/>
+                            <field name="delinquent_settlement_date"/>
+                            <field name="final_import_closure_date"/>
+                        </group>
+                        <group string="Post Clearance  Attachments ">
+
+                            <field name="post_clearance_audit_report" widget="binary"
+                                   filename="post_clearance_audit_report_filename"/>
+                            <field name="additional_duty_tax_receipt" widget="binary"
+                                   filename="additional_duty_tax_receipt_filename"/>
+                            <field name="additional_packing_list" widget="binary"
+                                   filename="additional_packing_list_filename"/>
+
+                        </group>
+                        <group string="Additional Information">
+                            <field name="paking_list_shared_with_inventory"/>
+                            <field name="nbe_final_approval_reference"/>
+                            <field name="package_count"/>
+                            <field name="total_weight"/>
+                        </group>
+
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

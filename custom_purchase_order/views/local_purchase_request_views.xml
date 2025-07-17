@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Base Form View -->
+    <record id="view_local_purchase_request_form" model="ir.ui.view">
+        <field name="name">local.purchase.request.form</field>
+        <field name="model">local.purchase.request</field>
+        <field name="arch" type="xml">
+            <form string="Local Purchase Request">
+                <header>
+                    <!-- Submit Button: Visible only to Users and CEO -->
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary"
+                            groups="custom_purchase_order.group_local_purchase_request_user, custom_purchase_order.group_local_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+
+                    <!-- Verify Button: Visible to PM Manager and CEO in the 'submitted' state -->
+                    <button name="action_approve" type="object" string="Verify" class="btn-primary"
+                            groups="custom_purchase_order.group_local_purchase_request_pm_manager, custom_purchase_order.group_local_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'submitted')]}"/>
+
+                    <!-- Budget Approved Button: Visible to Finance Manager and CEO in the 'approved' state -->
+                    <button name="action_budget_approve" type="object" string="Budget Approved" class="btn-primary"
+                            groups="custom_purchase_order.group_local_purchase_request_finance_manager, custom_purchase_order.group_local_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'approved')]}"/>
+
+                    <!-- PM Approve Button: Visible to PM Manager and CEO in the 'budget' state -->
+                    <button name="action_pm_approve" type="object" string="PM Approved" class="btn-primary"
+                            groups="custom_purchase_order.group_local_purchase_request_pm_manager, custom_purchase_order.group_local_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'budget')]}"/>
+
+                    <!-- CEO Approved Button: Visible only to CEO in the 'pmapproved' state -->
+                    <button name="action_done" type="object" string="CEO Approved" class="btn-primary"
+                            groups="custom_purchase_order.group_local_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'pmapproved')]}"/>
+
+                    <!-- Cancel Button: Visible to PM Manager and CEO, available in any state -->
+                    <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
+                            attrs="{'invisible': [('state', '==', 'draft')]}"
+                            groups="custom_purchase_order.group_local_purchase_request_pm_manager, custom_purchase_order.group_local_purchase_request_ceo"/>
+
+                    <!-- Reset to Draft Button: Visible to PM Manager, Finance Manager, and CEO, available in any state -->
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" class="btn-secondary"
+                            attrs="{'invisible': [('state', '==', 'draft')]}"
+                            groups="custom_purchase_order.group_local_purchase_request_pm_manager, custom_purchase_order.group_local_purchase_request_finance_manager, custom_purchase_order.group_local_purchase_request_ceo"/>
+
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <!-- Create RFQ Button (now using the computed field for visibility) -->
+                        <button class="oe_stat_button" name="custom_create_function" type="object"
+                                icon="fa-file-text-o"
+                                attrs="{'invisible': [('state', '!=', 'done')]}">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">Create RFQ</span>
+                            </div>
+                        </button>
+
+                        <!-- View RFQ Button (visible only if RFQ is created, showing count) -->
+                        <button class="oe_stat_button" name="return_list" type="object"
+                                icon="fa-file-text-o"
+                                attrs="{'invisible': [('state', '!=', 'done')]}">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="rfq_count" widget="statinfo" string="  RFQ(s)"/>
+                                </span>
+
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="purchase_type" invisible="1"/>
+                            <field name="requested_by" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="request_department" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="cost_center" attrs="{'readonly': [('state', '=', 'approved')]}"/>
+                        </group>
+                        <group>
+                            <field name="request_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="purpose"/>
+                            <field name="reason_for_cancel" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
+                            <field name="budgetary_position"/>
+                        </group>
+                    </group>
+
+                    <field name="local_rfq_created" invisible="1"/>
+                    <field name="show_create_rfq_button" invisible="1"/>
+
+                    <notebook>
+
+                        <page string="Products">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="uom_id"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal"/>
+                                    <field name="budget_liness"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- tree View -->
+    <record id="view_local_purchase_request_tree" model="ir.ui.view">
+        <field name="name">local.purchase.request.tree</field>
+        <field name="model">local.purchase.request</field>
+        <field name="arch" type="xml">
+            <tree string="Local Purchase Requests">
+                <field name="reference"/>
+                <field name="requested_by"/>
+                <field name="approved_by"/>
+                <field name="request_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_local_purchase_request" model="ir.actions.act_window">
+        <field name="name">Local Purchase Requests</field>
+        <field name="res_model">local.purchase.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_local_purchase_request_tree"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menu -->
+    <record id="menu_local_purchase_request" model="ir.ui.menu">
+        <field name="name">Local Purchase Request</field>
+        <field name="parent_id" ref="local_procurement_menu"/>
+        <field name="action" ref="action_local_purchase_request"/>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="view_store_request_inherit" model="ir.ui.view">
+        <field name="name">local.purchase.request.form.inherit</field>
+        <field name="model">local.purchase.request</field>
+        <field name="inherit_id" ref="view_local_purchase_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='reference']" position="after">
+                <group>
+                    <field name="store_request_id" readonly="1" widget="many2one"
+                           options="{'no_open': False, 'no_create': True}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

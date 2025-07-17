@@ -1,0 +1,30 @@
+<odoo>
+    <!-- Create Custom Category -->
+    <record id="local_purchase_request_category" model="ir.module.category">
+        <field name="name">Local Purchase</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- Create Custom User Groups and Assign to Custom Category -->
+    <record id="group_local_purchase_request_user" model="res.groups">
+        <field name="name">Employee</field>
+        <field name="category_id" ref="local_purchase_request_category"/>
+    </record>
+
+    <record id="group_local_purchase_request_pm_manager" model="res.groups">
+        <field name="name">PM Manager</field>
+        <field name="category_id" ref="local_purchase_request_category"/>
+    </record>
+
+    <record id="group_local_purchase_request_finance_manager" model="res.groups">
+        <field name="name">Budget Approver</field>
+        <field name="category_id" ref="local_purchase_request_category"/>
+    </record>
+
+    <record id="group_local_purchase_request_ceo" model="res.groups">
+        <field name="name">CEO</field>
+        <field name="category_id" ref="local_purchase_request_category"/>
+    </record>
+
+   
+</odoo>

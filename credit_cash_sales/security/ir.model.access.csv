@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_order_credit_cash_user,access.sale.order.credit.cash.user,model_sale_order,base.group_user,1,1,1,1
+access_sale_order_credit_cash_manager,access.sale.order.credit.cash.manager,model_sale_order,credit_cash_sales.group_credit_cash_sales_manager,1,1,1,1

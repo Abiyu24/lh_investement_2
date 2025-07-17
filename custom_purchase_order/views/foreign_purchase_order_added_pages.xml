@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit the purchase order form view -->
+        <record id="view_order_form_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <!-- Find the Other Information page and add the Ordering page after it -->
+                <!--xpath expr="//page[@name='purchase_delivery_invoice']" position="after">
+                    <page string="Ordering" name="ordering">
+                        <group>
+                            <field name="ordering_notes" placeholder="Enter your ordering notes here..."/>
+                        </group>
+                    </page>
+
+                </xpath-->
+                <sheet>
+                    <notbook>
+                        <page string="Currency Request">
+                            <group>
+                                <field name="currency_request_ids" widget="one2many_list"
+                                       options="{'no_create': True, 'no_open': False}">
+                                    <tree>
+                                        <field name="foreign_currency_request_reference"/>
+                                        <field name="requested_by" readonly="1"/>
+                                        <field name="request_department" readonly="1"/>
+                                        <field name="request_date" readonly="1"/>
+                                        <field name="currency_id"/>
+                                        <field name="price_amount"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notbook>
+                </sheet>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

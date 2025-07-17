@@ -1,0 +1,213 @@
+<odoo>
+    <data>
+        <!-- tree view for RFQs -->
+        <record id="view_local_create_rfq_tree" model="ir.ui.view">
+            <field name="name">local.create.rfq.tree</field>
+            <field name="model">local.create.rfq</field>
+            <field name="arch" type="xml">
+                <tree string="Local RFQ">
+                    <field name="reference"/>
+                    <field name="request_department"/>
+                    <field name="request_date"/>
+                    <field name="vendor_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_local_create_rfq_form" model="ir.ui.view">
+            <field name="name">local.create.rfq.form</field>
+            <field name="model">local.create.rfq</field>
+            <field name="arch" type="xml">
+                <form string="Local RFQ">
+                    <header>
+
+
+                        <button name="action_prepare_rfq" type="object" string="Submit RFQ" class="btn-primary"
+                                groups="custom_purchase_order.group_local_purchase_request_user, custom_purchase_order.group_local_purchase_request_ceo"
+                                attrs="{'invisible': [('state', '!=', 'preparedby')]}"/>
+                        <button name="action_approve_rfq" type="object" string="Approve RFQ" class="btn-primary"
+                                groups="custom_purchase_order.group_local_purchase_request_pm_manager, custom_purchase_order.group_local_purchase_request_ceo"
+                                attrs="{'invisible': [('state', '!=', 'approverfq')]}"/>
+                        <button name="action_reset_to_prepare_rfq" type="object"
+                                string="Reset to Draft" class="btn-secondary"
+                                attrs="{'invisible': [('state', '!=', 'approverfq')]}"/>
+                        <button name="action_confirm" type="object" string="Confirm" class="btn-primary"
+                                groups="custom_purchase_order.group_local_purchase_request_user, custom_purchase_order.group_local_purchase_request_ceo"
+                                attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="action_send" type="object" string="Approve Winner" class="btn-success"
+                                groups="custom_purchase_order.group_local_purchase_request_pm_manager, custom_purchase_order.group_local_purchase_request_ceo"
+                                attrs="{'invisible': [('state', '!=', 'confirmed')]}"/>
+                        <button name="action_reset_to_draft" type="object"
+                                string="Reset to Draft" class="btn-secondary"
+                                attrs="{'invisible': [('state', '!=', 'confirmed')]}"/>
+                        <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
+                                groups="custom_purchase_order.group_local_purchase_request_pm_manager, custom_purchase_order.group_local_purchase_request_ceo"
+                                attrs="{'invisible': [('state', '!=', 'cancelled')]}"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="action_create_po"
+                                    type="object" icon="fa-file-text-o"
+                                    attrs="{'invisible': [('state', '!=', 'sent')]}">
+
+                                <div class="o_stat_info">
+                                    <span class="o_stat_value">Create PO</span>
+                                </div>
+                            </button>
+
+                            <button class="oe_stat_button" name="action_view_po"
+                                    type="object" icon="fa-file-text-o"
+                                    attrs="{'invisible': [('state', '!=', 'sent')]}">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="po_count" widget="statinfo" string="PO(S)"/>
+                                    </span>
+                                </div>
+                            </button>
+
+                        </div>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="reference" readonly="1"/>
+                            </h1>
+                        </div>
+
+                        <div class="oe_title">
+                            <h4>
+                                <field name="purchase_request_id" readonly="1" options="{'no_open': False}"/>
+                            </h4>
+                        </div>
+                        <group>
+                            <group>
+
+                                <field name="request_date"/>
+                                <field name="purchase_type" invisible="1"/>
+                                <!--field name="requested_by"
+                                       attrs="{readonly': [('state', '==', 'preparedby,approverfq,draft,confirmed,sent')]}"/-->
+                                <!--field name="requested_by"
+                                       attrs="{readonly': [('state', '==', 'preparedby,approverfq,draft,confirmed,sent')]}"/-->
+                                <field name="requested_by" attrs="{'readonly': [('state', 'in', ['preparedby', 'approverfq', 'draft', 'confirmed', 'sent'])]}"/>
+                                />
+                                <field name="request_department"/>
+                                <field name="approved_by"
+                                       attrs="{'invisible': [('state', '==', 'preparedby,draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="remark"/>
+                                <field name="technical_remark"/>
+                                <field name="company_id"/>
+
+                            </group>
+                            <group string="Details for RFQ Report">
+
+                                <!--field name="prepared_by"
+                                       attrs="{'invisible': [('state', '!=', 'preparedby,approverfq')],'readonly:[('state', '!=', 'approverfq')]}"/-->
+                                <field name="prepared_by" attrs="{'invisible': [('state', 'not in', ['preparedby', 'approverfq'])],
+                                                                  'readonly': [('state', '!=', 'approverfq')]}"/>
+
+
+                                <!--field name="checked_by"
+                                       invisible="state != 'approverfq'"
+                                       required="state == 'approverfq'"
+                                /-->
+                                <!--field name="authorized_by"
+                                    invisible="state != 'approverfq'"
+                                       required="state == 'approverfq'"
+                                /-->
+
+
+                            </group>
+                            <group>
+
+                                <div class="oe_button_box" style="display: flex; gap: 30px; justify-content: flex-end;">
+                                    <button name="action_compute_winner"
+                                            type="object"
+                                            string="Pick Winner for Goods"
+                                            class="btn btn-primary"
+                                            attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('purchase_type', '!=', 'goods')]}">
+                                        <i class="fa fa-calculator" aria-hidden="true"></i>
+                                        Pick Winner for Goods
+                                    </button>
+
+                                    <button name="action_pick_winner"
+                                            type="object"
+                                            string="Pick Winner for Service"
+                                            class="btn btn-primary"
+                                            attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('purchase_type', '!=', 'service')]}">
+                                        <i class="fa fa-calculator" aria-hidden="true"></i>
+                                        Pick Winner for Service
+                                    </button>
+                                </div>
+
+                            </group>
+                        </group>
+
+                        <field name="local_po_created" invisible="1"/>
+                        <field name="show_create_po_button" invisible="1"/>
+                        <field name="product_details" invisible="1"/>
+                        <field name="winner_detail_ids" invisible="1"/>
+
+
+                        <notebook>
+                            <page string="Products">
+                                <field name="line_ids">
+                                    <tree string="RFQ Lines"
+                                          decoration-success="winner == 'win'"
+                                          decoration-danger="winner == 'lost'"
+                                          editable="bottom">
+                                        <field name="vendor_id"/>
+                                        <field name="product_id"/>
+                                        <field name="uom_id" readonly="1"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit"/>
+                                        <field name="price_total"/>
+                                        <field name="technical_by_percent" widget="percentage"/>
+                                        <field name="financial" widget="percentage"/>
+                                        <field name="available_product_ids" invisible="1"/>
+                                        <field name="winner" attinvisible="not winner"/>
+                                        <button name="action_accept" type="object" icon="fa-check" string="Accept"
+                                                invisible="not winner"/>
+                                        <button name="action_refuse" type="object" icon="fa-times" string="Refuse"
+                                                invisible="not winner"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                        </notebook>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action for Local RFQ -->
+        <record id="action_local_create_rfq" model="ir.actions.act_window">
+            <field name="name">Local RFQ</field>
+            <field name="res_model">local.create.rfq</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_local_create_rfq_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new RFQ.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu item for Local RFQ -->
+        <menuitem id="menu_local_create_rfq"
+                  name="Local RFQ"
+                  parent="purchase.menu_purchase_rfq"
+                  sequence="3"
+                  action="action_local_create_rfq"/>
+    </data>
+</odoo>

@@ -1,0 +1,171 @@
+<odoo>
+    <record id="view_foreign_purchase_request_form" model="ir.ui.view">
+        <field name="name">foreign.purchase.request.form</field>
+        <field name="model">foreign.purchase.request</field>
+        <field name="arch" type="xml">
+            <form string="Foreign Purchase Request">
+                <header>
+
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary"
+                            groups="custom_purchase_order.group_foreign_purchase_request_user, custom_purchase_order.group_foreign_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_approve" type="object" string="Verify" class="btn-primary"
+                            groups="custom_purchase_order.group_foreign_purchase_request_pm_manager, custom_purchase_order.group_foreign_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'submitted')]}"/>
+                    <button name="action_budget_approve" type="object" string="Budget Approved" class="btn-primary"
+                            groups="custom_purchase_order.group_foreign_purchase_request_finance_manager, custom_purchase_order.group_foreign_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'approved')]}"/>
+
+                    <!-- PM Approve Button: Visible to PM Manager and CEO in the 'budget' state -->
+                    <button name="action_pm_approve" type="object" string="PM Approved" class="btn-primary"
+                            groups="custom_purchase_order.group_foreign_purchase_request_pm_manager, custom_purchase_order.group_foreign_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'budget')]}"/>
+
+                    <!-- CEO Approved Button: Visible only to CEO in the 'pmapproved' state -->
+                    <button name="action_done" type="object" string="CEO Approved" class="btn-primary"
+                            groups="custom_purchase_order.group_foreign_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '!=', 'pmapproved')]}"/>
+
+                    <!-- Cancel Button: Visible to PM Manager and CEO, available in any state -->
+                    <button name="action_cancel" type="object" string="Cancel" class="btn-danger"
+                            groups="custom_purchase_order.group_foreign_purchase_request_pm_manager, custom_purchase_order.group_foreign_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '==', 'draft')]}"/>
+
+                    <!-- Reset to Draft Button: Visible to PM Manager, Finance Manager, and CEO, available in any state -->
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" class="btn-secondary"
+                            groups="custom_purchase_order.group_foreign_purchase_request_pm_manager, custom_purchase_order.group_foreign_purchase_request_finance_manager, custom_purchase_order.group_foreign_purchase_request_ceo"
+                            attrs="{'invisible': [('state', '==', 'draft')]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <!-- Create RFQ Button (now using the computed field for visibility) -->
+                        <button class="oe_stat_button" name="custom_create_function"
+                                type="object"
+                                icon="fa-file-text-o"
+                                attrs="{'invisible': [('state', '!=', 'done')]}">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">Create RFQ</span>
+                            </div>
+                        </button>
+
+                        <!-- View RFQ Button (visible only if RFQ is created, showing count) -->
+                        <button class="oe_stat_button" name="return_list"
+                                type="object"
+                                icon="fa-file-text-o"
+                                attrs="{'invisible': [('state', '!=', 'done')]}">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="rfq_count" widget="statinfo" string="  RFQ(s)"/>
+                                </span>
+
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+
+                            <field name="requested_by"/>
+                            <field name="request_department"/>
+                            <field name="cost_center"/>
+                            <field name="vendor_id" invisible="1"/>
+
+                        </group>
+                        <group>
+                            <field name="request_date"/>
+                            <field name="purpose"/>
+                            <field name="budgetary_position"/>
+                            <field name="product_details" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <field name="foreign_rfq_created" invisible="1"/>
+                    <field name="show_create_rfq_button" invisible="1"/>
+
+                    <notebook>
+                        <page string="Products">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="uom_id"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal"/>
+                                    <field name="budget_liness"/>
+
+                                </tree>
+                            </field>
+                        </page>
+                        <!--page string="customer_order">
+                            <field name="customer_order_line_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id" options="{'no_create': True}"/>
+                                    <field name="description"/>
+                                    <field name="pin_number"/>
+                                    <field name="quantity"/>
+                                </tree>
+                            </field>
+                        </page-->
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_foreign_purchase_request_tree" model="ir.ui.view">
+        <field name="name">foreign.purchase.request.tree</field>
+        <field name="model">foreign.purchase.request</field>
+        <field name="arch" type="xml">
+            <tree string="Foreign Purchase Requests">
+                <field name="reference"/>
+                <field name="requested_by"/>
+                <field name="approved_by"/>
+                <field name="request_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!--record id="view_foreign_purchase_request_form_selected_orders" model="ir.ui.view">
+        <field name="name">foreign.purchase.request.form.selected.orders</field>
+        <field name="model">foreign.purchase.request</field>
+        <field name="inherit_id" ref="custom_purchase_order.view_foreign_purchase_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Selected Customer Orders">
+                    <field name="customer_order_ids" />
+                </page>
+            </xpath>
+        </field>
+    </record-->
+    <record id="action_foreign_purchase_request" model="ir.actions.act_window">
+        <field name="name">Foreign Purchase Requests</field>
+        <field name="res_model">foreign.purchase.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_foreign_purchase_request_tree"/>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_foreign_purchase_request"
+              name="Foreign Purchase Requests"
+              parent="foreign_procurement_menu"
+              sequence="1"
+              action="action_foreign_purchase_request"/>
+
+    <!--menuitem id="menu_foreign_purchase_request_finance"
+              name="Foreign Purchase Requests"
+              parent="menu_purchase_request_finance_root"
+              sequence="2"            
+              action="action_foreign_purchase_request"/-->
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cash To Invoices Tree View -->
+    <record id="view_cash_to_invoice_tree" model="ir.ui.view">
+        <field name="name">sale.order.cash.to.invoice.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_order"/>
+                <field name="amount_total"/>
+                <field name="invoice_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Credit To Invoices Tree View -->
+    <record id="view_credit_to_invoice_tree" model="ir.ui.view">
+        <field name="name">sale.order.credit.to.invoice.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_order"/>
+                <field name="amount_total"/>
+                <field name="invoice_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Actions for Cash and Credit To Invoices -->
+    <record id="action_cash_to_invoice" model="ir.actions.act_window">
+        <field name="name">Cash To Invoices</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_cash_to_invoice_tree"/>
+        <field name="domain">[('sale_type', '=', 'cash'), ('invoice_status', '=', 'to invoice'), ('state', 'not in', ('draft', 'sent'))]</field>
+    </record>
+
+    <record id="action_credit_to_invoice" model="ir.actions.act_window">
+        <field name="name">Credit To Invoices</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_credit_to_invoice_tree"/>
+        <field name="domain">[('sale_type', '=', 'credit'), ('invoice_status', '=', 'to invoice'), ('state', 'not in', ('draft', 'sent'))]</field>
+    </record>
+</odoo>

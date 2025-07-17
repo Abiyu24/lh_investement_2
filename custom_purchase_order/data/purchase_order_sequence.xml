@@ -1,0 +1,31 @@
+<odoo>
+    
+    <record id="local_purchase_order_sequence" model="ir.sequence">
+            <field name="name">Local Purchase Order</field>
+            <field name="code">local.purchase.order.sequence</field>
+            <field name="prefix">POL-%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+    </record>
+
+
+
+    <!-- Sequence for Foreign Purchase Orders -->
+    <record id="foreign_purchase_order_sequence" model="ir.sequence">
+        <field name="name">Foreign Purchase Order</field>
+        <field name="code">foreign.purchase.order.sequence</field>
+        <field name="prefix">POF-%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        
+    </record>
+
+    <!-- Sequence for Direct Purchase Orders -->
+    <record id="direct_purchase_order_sequence" model="ir.sequence">
+        <field name="name">Direct Purchase Order</field>
+        <field name="code">direct.purchase.order.sequence</field>
+        <field name="prefix">POD-%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+    </record>
+</odoo>

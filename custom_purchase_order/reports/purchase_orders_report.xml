@@ -1,0 +1,133 @@
+<odoo>
+    <!-- tree View for Local Purchase Orders -->
+    <record id="view_purchase_order_local_tree" model="ir.ui.view">
+        <field name="name">purchase.order.local.tree</field>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+            <tree string="Local Purchase Orders" create="false" edit="false" delete="false">
+                <field name="name"/>
+                <field name="rfq_request_id" string="RFQ request Reference"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="state"/>
+                <field name="date_order"/>
+                <field name="amount_total"/>
+                <field name="payment_created"/>
+                <field name="custom_count"/>
+                <field name="order_line" widget="one2many_tags">
+                    <tree editable="bottom" create="false">
+                        <field name="product_id" string="Product" widget="many2one_avatar"/>
+                        <field name="product_qty" string="Qty"/>
+                        <field name="price_unit" string="Price" widget="monetary"/>
+                    </tree>
+                </field>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action for Local Purchase Orders -->
+    <record id="action_purchase_order_local" model="ir.actions.act_window">
+        <field name="name">Local Purchase Orders</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_purchase_order_local_tree"/>
+        <field name="domain">[('purchase_type', '=', 'local')]</field>
+        <field name="context">{'purchase_type': 'local'}</field>
+    </record>
+
+    <!-- tree View for Direct Purchase Orders -->
+    <record id="view_purchase_order_direct_tree" model="ir.ui.view">
+        <field name="name">purchase.order.direct.tree</field>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+            <tree string="Direct Purchase Orders" create="false" edit="false" delete="false">
+                <field name="name"/>
+                <field name="without_rfq_request_ids" string="Direct Purchase Request Reference"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="state"/>
+                <field name="date_order"/>
+                <field name="amount_total"/>
+                <field name="payment_created"/>
+                <field name="custom_count"/>
+                <field name="order_line" widget="one2many_tags">
+                    <tree editable="bottom" create="false">
+                        <field name="product_id" string="Product" widget="many2one_avatar"/>
+                        <field name="product_qty" string="Qty"/>
+                        <field name="price_unit" string="Price" widget="monetary"/>
+                    </tree>
+                </field>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action for Direct Purchase Orders -->
+    <record id="action_purchase_order_direct" model="ir.actions.act_window">
+        <field name="name">Direct Purchase Orders</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_purchase_order_direct_tree"/>
+        <field name="domain">[('purchase_type', '=', 'direct')]</field>
+        <field name="context">{'purchase_type': 'direct'}</field>
+    </record>
+
+    <!-- tree View for Foreign Purchase Orders -->
+    <record id="view_purchase_order_foreign_tree" model="ir.ui.view">
+        <field name="name">purchase.order.foreign.tree</field>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+            <tree string="Foreign Purchase Orders" create="false" edit="false" delete="false">
+                <field name="name"/>
+                <field name="rfq_foreign_request_id" string="Foreign RFQ Reference"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="state"/>
+                <field name="date_order"/>
+                <field name="amount_total"/>
+                <field name="payment_created"/>
+                 <field name="custom_count"/>
+                 <field name="order_line" widget="one2many_tags">
+                    <tree editable="bottom" create="false">
+                        <field name="product_id" string="Product" widget="many2one_avatar"/>
+                        <field name="product_qty" string="Qty"/>
+                        <field name="price_unit" string="Price" widget="monetary"/>
+                    </tree>
+                </field>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action for Foreign Purchase Orders -->
+    <record id="action_purchase_order_foreign" model="ir.actions.act_window">
+        <field name="name">Foreign Purchase Orders</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_purchase_order_foreign_tree"/>
+        <field name="domain">[('purchase_type', '=', 'foreign')]</field>
+        <field name="context">{'purchase_type': 'foreign'}</field>
+    </record>
+
+
+    <menuitem id="menu_purchase_order_type_root" 
+              name="Purchase Order Reports"
+              parent="purchase.purchase_report_main"
+              sequence="4"            
+             />
+    
+      
+    
+    <menuitem id="menu_purchase_order_local" 
+              name="Local Purchase Orders"
+              parent="menu_purchase_order_type_root"
+              sequence="1" 
+              action="action_purchase_order_local"/>
+    
+    <menuitem id="menu_purchase_order_direct" 
+              name="Direct Purchase Orders"
+              parent="menu_purchase_order_type_root"
+              sequence="2" 
+              action="action_purchase_order_direct"/>
+    
+    <menuitem id="menu_purchase_order_foreign" 
+              name="Foreign Purchase Orders"
+              parent="menu_purchase_order_type_root"
+              sequence="3" 
+              action="action_purchase_order_foreign"/>
+</odoo>
